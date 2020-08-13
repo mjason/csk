@@ -10,3 +10,6 @@ edition = "2018"
 rodio = { git = "https://github.com/RustAudio/rodio" }
 serialport = "3.3.0"
 clap = "3.0.0-beta.1"
+serial_frame = "0.3.0"
+log = "0.4.11"
+fern = { version = "0.6.0", features = ["colored"] }
