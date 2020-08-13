@@ -19,8 +19,8 @@ jobs:
     - name: Build
       run: cargo build --verbose --release
     - name: Archive production artifacts
-        uses: actions/upload-artifact@v2
-        with:
-          name: target_update
-          path: |
-            target
+      uses: actions/upload-artifact@v2
+      with:
+        name: target_update
+        path: |
+          target
