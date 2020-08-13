@@ -1,6 +1,7 @@
 use std::time::Duration;
 use serialport::prelude::*;
 use serial_frame::{create_line_sender};
+use fern::colors::{Color, ColoredLevelConfig};
 
 fn logger(mark: &str, message: &str) {
     if let Some(message) = message.get(3..) {
@@ -41,4 +42,35 @@ pub fn receive(port_name: &str, baud_rate: u32) {
     }
     let e = linestop.stop();
     info!("Stop: {:?}", e);
+}
+
+pub fn init_log(log_level: Option<&str>) {
+
+    let level = match log_level {
+        Some(leve) => {
+            match leve {
+                "info" => log::LevelFilter::Info,
+                "trace" => log::LevelFilter::Trace,
+                "error" => log::LevelFilter::Error,
+                "warn" => log::LevelFilter::Warn,
+                _ => log::LevelFilter::Debug
+            }
+        },
+        None => log::LevelFilter::Debug,
+    };
+
+    let colors = ColoredLevelConfig::new()
+        .debug(Color::Magenta).info(Color::BrightGreen);
+
+    fern::Dispatch::new()
+        .format(move |out, message, record| {
+            out.finish(format_args!(
+                "[{}]{}",
+                colors.color(record.level()),
+                message
+            ))
+        })
+        .level(level)
+        .chain(std::io::stdout())
+        .apply().unwrap();
 }
